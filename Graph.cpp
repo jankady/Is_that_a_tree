@@ -17,9 +17,6 @@ Graph::Graph(int v) {
     this->edges = new int*[v];
     for (int i = 0; i < v; i++) { // matrix
         this->edges[i] = new int[v];
-        for (int j = 0; j < v; j++) {
-            this->edges[i][j] = 0;
-        }
     }
     this->vertexCount = 0;
     this->edgeCount = 0;
@@ -87,5 +84,38 @@ void Graph::addEdge(int vertex1Value, int vertex2Value) {
         this->edges[vertex1][vertex2] = 1;
         this->edges[vertex2][vertex1] = 1; // undirected graph
         this->edgeCount++;
+    }
+}
+
+bool Graph::isTree() {
+    // Kontrola podminky E = V - 1
+    if (this->edgeCount != this->vertexCount - 1) {
+        return false;
+    }
+
+    bool* visited = new bool[this->vertexCount];
+    for (int i = 0; i < this->vertexCount; i++) {
+        visited[i] = false;
+    }
+    // implenetace algoritmu
+
+    delete visited;
+    return true;
+}
+
+void Graph::printGraph() {
+    std::cout << "Graph with " << this->vertexCount << " vertexes and " << this->edgeCount << " edges." << std::endl;
+    for (int i = 0; i < this->vertexCount; i++) {
+        if (this->vertexes[i] != nullptr) {
+            std::cout << "Vertex " << this->vertexes[i]->getId() << ": " << this->vertexes[i]->getValue() << std::endl;
+        }
+    }
+    std::cout << "Edges:" << std::endl;
+    for (int i = 0; i < this->vertexCount; i++) {
+        for (int j = i ; j < this->vertexCount; j++) { // print only upper triangle of the matrix and diagonal
+            if (this->edges[i][j] == 1) {
+                std::cout << "Edge between vertex " << this->vertexes[i]->getValue() << " and vertex " << this->vertexes[j]->getValue() << std::endl;
+            }
+        }
     }
 }
