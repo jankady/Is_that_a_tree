@@ -9,7 +9,7 @@ class Vertex;
 
 class Graph {
 private:
-    Vertex* vertexes;
+    Vertex** vertexes;
     int** edges;
     int vertexCount;
     int edgeCount;
@@ -25,7 +25,9 @@ public:
     int getEdgeCount();
 
     Vertex* createVertex(int value);
-    void addEdge(int vertex1, int vertex2);
+    void addEdge(int vertex1Value, int vertex2Value);
+
+    bool isTree();
 
 };
 
