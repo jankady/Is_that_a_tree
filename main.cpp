@@ -1,4 +1,5 @@
 
+#include <fstream>
 #include <iostream>
 
 #include "Graph.h"
@@ -9,15 +10,24 @@
 
 int main() {
     // std::cout << "Hello, World!" << std::endl;
+    std::string line;
+    std::ifstream graph1("graph1.txt");
 
-    Graph g(5);
-    g.createVertex(4);
-    g.createVertex(10);
-    g.createVertex(15);
+    Graph g(20);
 
-    g.addEdge(4, 10);
-    g.addEdge(10, 15);
-    g.addEdge(15, 15);
+    for (int i = 1; i <= 13; i++) { // create 13 vertices
+        g.createVertex(i);
+    }
+
+    while (getline( graph1, line)) {
+
+        int vertex1Value = line[0] - '0';
+        int vertex2Value = line[2] - '0';
+        g.addEdge(vertex1Value, vertex2Value);
+    }
+    graph1.close();
+
+
 
     g.printGraph();
     return 0;

@@ -97,9 +97,44 @@ bool Graph::isTree() {
     for (int i = 0; i < this->vertexCount; i++) {
         visited[i] = false;
     }
+    std::stack<Vertex*> stack;
+    stack.push(this->vertexes[0]);
     // implenetace algoritmu
+    while (!stack.empty()) {
+        Vertex* current = stack.top();
+        stack.pop();
+        int currentIndex = current->getId();
+        if (visited[currentIndex]) {
+            continue;
+        }
+        visited[currentIndex] = true;
+        for (int i = 0; i < this->vertexCount; i++) {
+            if (this->edges[currentIndex][i] == 1) {
 
-    delete visited;
+                if (currentIndex == i) {
+                    delete[] visited;
+                    return false; // smycka ukazujici na stejny bod v grafu
+                }
+
+                if (!visited[currentIndex]) {
+                    delete[] visited;
+                    return false; // graf obsahuje cyklus, protoze jsme navstivili uz navstiveny vertex
+                }
+
+                stack.push(this->vertexes[i]);
+            }
+        }
+    }
+
+    for (int i = 0; i < this->vertexCount; i++) {
+       if (visited[i] == false) {
+           delete[] visited;
+           return false; // graf neni souvisly, protoze nebyl navstiven nejaky vertex
+       }
+    }
+
+
+    delete[] visited;
     return true;
 }
 
