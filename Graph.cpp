@@ -100,7 +100,7 @@ bool Graph::isTree() {
     }
     std::stack<Vertex*> stack;
     stack.push(this->vertexes[0]);
-    // implenetace algoritmu
+    // DFS - pouze kontrola souvislosti (cyklus není třeba ověřovat, protože E==V-1 garantuje acykličnost u souvislého grafu)
     while (!stack.empty()) {
         Vertex* current = stack.top();
         stack.pop();
@@ -110,20 +110,7 @@ bool Graph::isTree() {
         }
         visited[currentIndex] = true;
         for (int i = 0; i < this->vertexCount; i++) {
-            if (this->edges[currentIndex][i] == 1) {
-
-                if (currentIndex == i) {
-                    delete[] visited;
-                    std::cout << "There is a loop in vertex: " <<  current->getValue() << std::endl;
-                    return false; // smycka ukazujici na stejny bod v grafu
-                }
-
-                if (visited[i]) {
-                    delete[] visited;
-                    std::cout << "There is a cycle" <<  std::endl;
-                    return false;
-                }
-
+            if (this->edges[currentIndex][i] == 1 && !visited[i]) {
                 stack.push(this->vertexes[i]);
             }
         }
