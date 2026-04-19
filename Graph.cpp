@@ -16,7 +16,7 @@ Graph::Graph(int v) {
 
     this->edges = new int*[v];
     for (int i = 0; i < v; i++) { // matrix
-        this->edges[i] = new int[v];
+        this->edges[i] = new int[v](); // inicialiace na 0 pomoct () a ne for cyklud
     }
     this->vertexCount = 0;
     this->edgeCount = 0;
@@ -90,6 +90,7 @@ void Graph::addEdge(int vertex1Value, int vertex2Value) {
 bool Graph::isTree() {
     // Kontrola podminky E = V - 1
     if (this->edgeCount != this->vertexCount - 1) {
+        std::cout << "Default condition is not satisfied" << std::endl;
         return false;
     }
 
@@ -113,12 +114,14 @@ bool Graph::isTree() {
 
                 if (currentIndex == i) {
                     delete[] visited;
+                    std::cout << "There is a loop in vertex: " <<  current->getValue() << std::endl;
                     return false; // smycka ukazujici na stejny bod v grafu
                 }
 
-                if (!visited[currentIndex]) {
+                if (visited[i]) {
                     delete[] visited;
-                    return false; // graf obsahuje cyklus, protoze jsme navstivili uz navstiveny vertex
+                    std::cout << "There is a cycle" <<  std::endl;
+                    return false;
                 }
 
                 stack.push(this->vertexes[i]);
@@ -129,6 +132,7 @@ bool Graph::isTree() {
     for (int i = 0; i < this->vertexCount; i++) {
        if (visited[i] == false) {
            delete[] visited;
+           std::cout << "All of the verticies are not connected" <<  std::endl;
            return false; // graf neni souvisly, protoze nebyl navstiven nejaky vertex
        }
     }
