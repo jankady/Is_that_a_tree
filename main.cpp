@@ -12,13 +12,13 @@
 int main() {
     // std::cout << "Hello, World!" << std::endl;
     std::string line;
-    std::ifstream graph1("./graph1.txt");
+    std::ifstream graph1("./testCases/graph1.txt");
 
     if (!graph1.is_open()) {
         std::cout << "Error opening file." << std::endl;
         return 1;
     }
-    Graph g(20);
+    Graph g(20); // nastavim max 20 vrcholu
 
     for (int i = 0; i <= 13; i++) { // create 14 vertices
         g.createVertex(i);
