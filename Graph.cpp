@@ -5,6 +5,7 @@
 #include "Graph.h"
 
 #include <iostream>
+#include <stack>
 
 #include "Vertex.h"
 
@@ -16,7 +17,7 @@ Graph::Graph(int v) {
 
     this->edges = new int*[v];
     for (int i = 0; i < v; i++) { // matrix
-        this->edges[i] = new int[v](); // inicialiace na 0 pomoct () a ne for cyklud
+        this->edges[i] = new int[v](); // inicialiace na 0 pomoct () a ne for cyklus
     }
     this->vertexCount = 0;
     this->edgeCount = 0;

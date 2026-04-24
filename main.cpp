@@ -9,6 +9,8 @@
 // strom je souvisly a acyklicky graf + jeste E = V - 1,
 // taky nemuze mit smycku
 
+const int MAX_VERTICES = 20;
+
 int main() {
     // std::cout << "Hello, World!" << std::endl;
     std::string line;
@@ -18,9 +20,9 @@ int main() {
         std::cout << "Error opening file." << std::endl;
         return 1;
     }
-    Graph g(20); // nastavim max 20 vrcholu
+    Graph g(MAX_VERTICES);
 
-    for (int i = 0; i <= 13; i++) { // create 14 vertices
+    for (int i = 0; i < 14; i++) { // create 14 vertices
         g.createVertex(i);
     }
 
