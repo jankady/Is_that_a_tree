@@ -113,14 +113,15 @@ public:
      *
      * **Krok 1 – kontrola počtu hran:**
      * Okamžitě vrátí `false`, pokud E ≠ V-1.
-     * Tato podmínka zároveň zaručuje acykličnost u spojitého grafu,
-     * takže samostatná detekce cyklů není potřeba.
+     * Nejrychlejší test – zahodí evidentně špatné grafy bez dalšího procházení.
      *
-     * **Krok 2 – kontrola spojitosti (iterativní DFS) a smyčky:**
+     * **Krok 2 – kontrola smyček:**
+     * Prochází diagonálu matice sousednosti (`edges[i][i]`).
+     * Pokud je hodnota 1, vrchol ukazuje sám na sebe – strom smyčku mít nesmí.
+     *
+     * **Krok 3 – kontrola spojitosti (iterativní DFS):**
      * Spustí prohledávání do hloubky od vrcholu 0 a ověří,
      * že každý vrchol byl navštíven.
-     * Pokud `edges[i][i] == 1`,
-     * vrchol ukazuje sám na sebe (smyčka), graf nemůže být stromem.
      *
      * **Složitost:**
      * - Časová: O(V + E) = O(V), protože E = V-1

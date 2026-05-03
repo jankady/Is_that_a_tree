@@ -3,3 +3,5 @@ cmake-build-release
 .idea
 docs
 .claude
+CMakeCache.txt
+cmake.check_cache

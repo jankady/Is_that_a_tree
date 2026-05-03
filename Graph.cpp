@@ -94,6 +94,12 @@ void Graph::addEdge(int vertex1Value, int vertex2Value) {
 }
 
 bool Graph::isTree() {
+
+    // Prazny graf neni strom
+    if (this->vertexCount <= 0) {
+        return false;
+    }
+
     // Krok 1: Strom s V vrcholy musí mít přesně V-1 hran.
     // Podmínka E == V-1 zároveň zaručuje acykličnost u spojitého grafu,
     // takže detekce cyklů není potřeba – stačí ověřit spojitost.
@@ -102,7 +108,16 @@ bool Graph::isTree() {
         return false;
     }
 
-    // Krok 2: Ověření spojitosti iterativním DFS od vrcholu 0.
+    // Krok 2: Smyčka (hrana vrcholu na sebe sama) okamžitě diskvalifikuje strom.
+    // Prochází diagonálu matice – edges[i][i] == 1 znamená smyčku na vrcholu i.
+    for (int i = 0; i < this->vertexCount; i++) {
+        if (this->edges[i][i] == 1) {
+            std::cout << "Graph contains a self-loop on vertex " << this->vertexes[i]->getValue() << std::endl;
+            return false;
+        }
+    }
+
+    // Krok 3: Ověření spojitosti iterativním DFS od vrcholu 0.
     bool* visited = new bool[this->vertexCount];
     for (int i = 0; i < this->vertexCount; i++) {
         visited[i] = false;
@@ -123,15 +138,10 @@ bool Graph::isTree() {
             if (this->edges[currentIndex][i] == 1 && !visited[i]) {
                 stack.push(this->vertexes[i]);
             }
-            if (this->edges[i][i] == 1) {
-                delete[] visited;
-                std::cout << "Graph contains a self-loop on vertex " << this->vertexes[i]->getValue() << std::endl;
-                return false;
-            }
         }
     }
 
-    // Krok 3: Pokud nebyl navštíven každý vrchol, graf není spojitý.
+    // Krok 4: Pokud nebyl navštíven každý vrchol, graf není spojitý.
     for (int i = 0; i < this->vertexCount; i++) {
         if (visited[i] == false) {
             delete[] visited;
