@@ -5,3 +5,4 @@ docs
 .claude
 CMakeCache.txt
 cmake.check_cache
+build

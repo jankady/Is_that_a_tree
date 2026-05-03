@@ -1,4 +1,4 @@
-./**
+/**
  * @file main.cpp
  * @brief Začátek programu, načte graf ze souboru a otestuje, zda je stromem.
  *
