@@ -1,6 +1,11 @@
-//
-// Created by Jan Kaduch on 12.04.2026.
-//
+/**
+ * @file Graph.cpp
+ * @brief Implementace třídy Graph včetně algoritmu isTree().
+ *
+ * @author Jan Kaduch
+ * @date 12.04.2026
+ * @version 1.0
+ */
 
 #include "Graph.h"
 
@@ -16,8 +21,8 @@ Graph::Graph(int v) {
     }
 
     this->edges = new int*[v];
-    for (int i = 0; i < v; i++) { // matrix
-        this->edges[i] = new int[v](); // inicialiace na 0 pomoct () a ne for cyklus
+    for (int i = 0; i < v; i++) {
+        this->edges[i] = new int[v](); // () inicializuje hodnoty na 0
     }
     this->vertexCount = 0;
     this->edgeCount = 0;
@@ -46,7 +51,7 @@ int Graph::getVertexIndexFromValue(int vertexValue) {
         }
     }
     std::cout << "Vertex with value " << vertexValue << " was not found." << std::endl;
-    return -1; // not found
+    return -1;
 }
 
 int Graph::getVertexCount() {
@@ -72,36 +77,40 @@ void Graph::addEdge(int vertex1Value, int vertex2Value) {
 
     int vertex1 = this->getVertexIndexFromValue(vertex1Value);
     int vertex2 = this->getVertexIndexFromValue(vertex2Value);
-    if (vertex1 == -1 ) {
+    if (vertex1 == -1) {
         std::cout << "Cannot add edge vertex 1 does not exist" << std::endl;
         return;
     }
-    if (vertex2 == -1 ) {
+    if (vertex2 == -1) {
         std::cout << "Cannot add edge vertex 2 does not exist" << std::endl;
         return;
     }
 
-    if (this->edges[vertex1][vertex2] == 0) { // prevent duplicate edges
+    if (this->edges[vertex1][vertex2] == 0) {
         this->edges[vertex1][vertex2] = 1;
-        this->edges[vertex2][vertex1] = 1; // undirected graph
+        this->edges[vertex2][vertex1] = 1; // neorientovaný graf – matice je symetrická
         this->edgeCount++;
     }
 }
 
 bool Graph::isTree() {
-    // Kontrola podminky E = V - 1
+    // Krok 1: Strom s V vrcholy musí mít přesně V-1 hran.
+    // Podmínka E == V-1 zároveň zaručuje acykličnost u spojitého grafu,
+    // takže detekce cyklů není potřeba – stačí ověřit spojitost.
     if (this->edgeCount != this->vertexCount - 1) {
         std::cout << "Default condition is not satisfied" << std::endl;
         return false;
     }
 
+    // Krok 2: Ověření spojitosti iterativním DFS od vrcholu 0.
     bool* visited = new bool[this->vertexCount];
     for (int i = 0; i < this->vertexCount; i++) {
         visited[i] = false;
     }
+
     std::stack<Vertex*> stack;
     stack.push(this->vertexes[0]);
-    // DFS - pouze kontrola souvislosti (cyklus není třeba ověřovat, protože E==V-1 garantuje acykličnost u souvislého grafu)
+
     while (!stack.empty()) {
         Vertex* current = stack.top();
         stack.pop();
@@ -114,17 +123,22 @@ bool Graph::isTree() {
             if (this->edges[currentIndex][i] == 1 && !visited[i]) {
                 stack.push(this->vertexes[i]);
             }
+            if (this->edges[i][i] == 1) {
+                delete[] visited;
+                std::cout << "Graph contains a self-loop on vertex " << this->vertexes[i]->getValue() << std::endl;
+                return false;
+            }
         }
     }
 
+    // Krok 3: Pokud nebyl navštíven každý vrchol, graf není spojitý.
     for (int i = 0; i < this->vertexCount; i++) {
-       if (visited[i] == false) {
-           delete[] visited;
-           std::cout << "All of the verticies are not connected" <<  std::endl;
-           return false; // graf neni souvisly, protoze nebyl navstiven nejaky vertex
-       }
+        if (visited[i] == false) {
+            delete[] visited;
+            std::cout << "All of the verticies are not connected" << std::endl;
+            return false;
+        }
     }
-
 
     delete[] visited;
     return true;
@@ -139,9 +153,10 @@ void Graph::printGraph() {
     }
     std::cout << "Edges:" << std::endl;
     for (int i = 0; i < this->vertexCount; i++) {
-        for (int j = i ; j < this->vertexCount; j++) { // print only upper triangle of the matrix and diagonal
+        for (int j = i; j < this->vertexCount; j++) { // horní trojúhelník – každá hrana se tiskne jen jednou
             if (this->edges[i][j] == 1) {
-                std::cout << "Edge between vertex " << this->vertexes[i]->getValue() << " and vertex " << this->vertexes[j]->getValue() << std::endl;
+                std::cout << "Edge between vertex " << this->vertexes[i]->getValue()
+                          << " and vertex " << this->vertexes[j]->getValue() << std::endl;
             }
         }
     }

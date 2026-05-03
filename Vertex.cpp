@@ -1,6 +1,11 @@
-//
-// Created by Jan Kaduch on 12.04.2026.
-//
+/**
+ * @file Vertex.cpp
+ * @brief Implementace třídy Vertex.
+ *
+ * @author Jan Kaduch
+ * @date 12.04.2026
+ * @version 1.0
+ */
 
 #include "Vertex.h"
 

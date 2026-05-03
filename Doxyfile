@@ -1,0 +1,138 @@
+# =============================================================================
+# Doxyfile – konfigurace pro projekt "Is That a Tree?"
+# =============================================================================
+# Jak vygenerovat dokumentaci:
+#   doxygen Doxyfile
+# Výsledek:
+#   docs/html/index.html  – otevři v prohlížeči
+# =============================================================================
+
+#---------------------------------------------------------------------------
+# Identita projektu
+#---------------------------------------------------------------------------
+
+## Jméno projektu zobrazené v záhlaví každé stránky.
+PROJECT_NAME           = "Is That a Tree?"
+
+## Verze / číslo vydání projektu.
+PROJECT_NUMBER         = 1.0
+
+## Krátký popis projektu (zobrazí se pod názvem).
+PROJECT_BRIEF          = "Rozhoduje, zda je neorientovaný graf stromem (DFS + podmínka E=V-1)."
+
+## Volitelné logo projektu (cesta k obrázku PNG/SVG). Necháme prázdné.
+PROJECT_LOGO           =
+
+#---------------------------------------------------------------------------
+# Vstup – co Doxygen analyzuje
+#---------------------------------------------------------------------------
+
+## Adresář (nebo soubory), které má Doxygen zpracovat.
+## Tečka (.) znamená aktuální adresář = kořen projektu.
+INPUT                  = .
+
+## Přípony souborů, které Doxygen prohledá.
+FILE_PATTERNS          = *.h *.cpp
+
+## Prohledávat podsložky? Pro tento projekt stačí NO.
+RECURSIVE              = NO
+
+## Složky, které Doxygen přeskočí (build výstupy nejsou zdrojový kód).
+EXCLUDE                = build cmake-build-debug cmake-build-release docs
+
+#---------------------------------------------------------------------------
+# Výstup – kde a v jakém formátu
+#---------------------------------------------------------------------------
+
+## Kořenový adresář pro veškerý generovaný výstup.
+OUTPUT_DIRECTORY       = docs
+
+## Generovat HTML dokumentaci? Ano – je nejpřehlednější.
+GENERATE_HTML          = YES
+
+## Podsložka v OUTPUT_DIRECTORY pro HTML výstup.
+HTML_OUTPUT            = html
+
+## Generovat LaTeX (PDF)? Pro tento projekt není potřeba.
+GENERATE_LATEX         = NO
+
+#---------------------------------------------------------------------------
+# Co extrahovat
+#---------------------------------------------------------------------------
+
+## Dokumentovat i prvky BEZ komentářů? YES = zobrazí se celá struktura kódu.
+## Hodí se při prvním spuštění – uvidíš, co ještě nemá dokumentaci.
+EXTRACT_ALL            = YES
+
+## Dokumentovat i privátní členy tříd?
+EXTRACT_PRIVATE        = YES
+
+## Dokumentovat i statické členy?
+EXTRACT_STATIC         = YES
+
+#---------------------------------------------------------------------------
+# Chování komentářů
+#---------------------------------------------------------------------------
+
+## JavaDoc autobrief: první věta komentáře se automaticky stane @brief popisem.
+## Věta končí tečkou, otazníkem nebo vykřičníkem následovaným mezerou.
+JAVADOC_AUTOBRIEF      = YES
+
+## Nezopakovat @brief popis v sekci detailního popisu.
+REPEAT_BRIEF           = NO
+
+## Zobrazit krátký popis u výpisu členů třídy?
+BRIEF_MEMBER_DESC      = YES
+
+#---------------------------------------------------------------------------
+# Prohlížení zdrojového kódu
+#---------------------------------------------------------------------------
+
+## Vložit do HTML prohlížeč zdrojových souborů s prolinkováním na dokumentaci?
+SOURCE_BROWSER         = YES
+
+## Vložit přímo zdrojový kód do dokumentačních stránek?
+INLINE_SOURCES         = NO
+
+## Zobrazit vztahy "tento člen je volán z…"?
+REFERENCED_BY_RELATION = YES
+
+## Zobrazit vztahy "tento člen volá…"?
+REFERENCES_RELATION    = YES
+
+#---------------------------------------------------------------------------
+# Diagramy tříd (vyžaduje nainstalovaný Graphviz)
+#---------------------------------------------------------------------------
+
+## Má Doxygen použít nástroj dot z Graphviz pro generování grafů?
+## Změň na YES pokud máš Graphviz nainstalovaný (https://graphviz.org).
+HAVE_DOT               = NO
+
+## Jednoduchý diagram dědičnosti a skládání (nevyžaduje dot).
+CLASS_DIAGRAMS         = YES
+
+#---------------------------------------------------------------------------
+# Varování a chybové hlášky
+#---------------------------------------------------------------------------
+
+## Potlačit výpis průběhu generování?
+QUIET                  = NO
+
+## Zobrazovat varování?
+WARNINGS               = YES
+
+## Varovat, pokud veřejný prvek nemá dokumentaci?
+WARN_IF_UNDOCUMENTED   = YES
+
+## Varovat při chybách v Doxygen komentářích (@param pro neexistující parametr apod.)?
+WARN_IF_DOC_ERROR      = YES
+
+#---------------------------------------------------------------------------
+# Kódování
+#---------------------------------------------------------------------------
+
+## Kódování tohoto Doxyfile.
+DOXYFILE_ENCODING      = UTF-8
+
+## Kódování vstupních zdrojových souborů.
+INPUT_ENCODING         = UTF-8
