@@ -14,24 +14,28 @@ class Vertex;
 
 /**
  * @class Graph
- * @brief Neorientovaný graf uložený jako matice sousednosti s podporou detekce stromu.
+ * @brief Neorientovaný graf uložený jako seznam sousednosti s podporou detekce stromu.
  *
  * @details
- * Třída spravuje pevný počet vrcholů (Vertex) a čtvercovou matici sousednosti.
- * Hlavním účelem je metoda isTree(), která v čase O(V) rozhodne, zda je graf stromem, kde V je počet vrcholů.
+ * Třída spravuje pevný počet vrcholů (Vertex) a pro každý vrchol pole indexů jeho sousedů.
+ * Hlavním účelem je metoda isTree(), která v čase O(V+E) rozhodne, zda je graf stromem,
+ * kde V je počet vrcholů a E počet hran.
  *
  * ### Rozložení paměti
- * | Člen        | Typ         | Popis |
- * |-------------|-------------|-------|
- * | `vertexes`  | `Vertex**`  | Pole ukazatelů na vrcholy, indexované přes id. |
- * | `edges`     | `int**`     | Čtvercová matice; `edges[i][j] == 1` právě tehdy, když hrana {i,j} existuje. |
+ * | Člen             | Typ         | Popis |
+ * |------------------|-------------|-------|
+ * | `vertexes`       | `Vertex**`  | Pole ukazatelů na vrcholy, indexované přes id. |
+ * | `neighbors`      | `int**`     | Pole seznamů; `neighbors[i]` obsahuje indexy sousedů vrcholu i. |
+ * | `neighborCount`  | `int*`      | `neighborCount[i]` je aktuální počet sousedů vrcholu i. |
  *
- * @note Graf je neorientovaný – matice je symetrická (`edges[i][j] == edges[j][i]`).
+ * @note Graf je neorientovaný – každá hrana {i,j} je uložena dvakrát: index j v seznamu
+ *       vrcholu i a index i v seznamu vrcholu j.
  */
 class Graph {
 private:
-    Vertex** vertexes;    ///< Pole ukazatelů na vrcholy indexované interním id.
-    int**    edges;       ///< Symetrická matice sousednosti (hodnoty 0 nebo 1).
+    Vertex** vertexes;       ///< Pole ukazatelů na vrcholy indexované interním id.
+    int**    neighbors;      ///< Seznamy sousedů; neighbors[i] = pole indexů sousedů vrcholu i.
+    int*     neighborCount;  ///< neighborCount[i] = aktuální počet sousedů vrcholu i.
     int      vertexCount;    ///< Aktuální počet vrcholů v grafu.
     int      edgeCount;      ///< Aktuální počet neorientovaných hran v grafu.
     int      maxVertexCount; ///< Maximální kapacita určena konstruktorem.
@@ -48,8 +52,8 @@ public:
      * @brief Vytvoří prázdný graf se zadanou maximální kapacitou vrcholů.
      *
      * @details
-     * Alokuje pole ukazatelů na vrcholy a matici sousednosti V×V,
-     * přičemž všechny hodnoty jsou inicializovány na nulu.
+     * Alokuje pole ukazatelů na vrcholy, pole seznamů sousedů (pro každý vrchol
+     * pole velikosti V) a pole čítačů sousedů. Všechny čítače jsou inicializovány na 0.
      *
      * @param[in] vertexCount  Maximální počet vrcholů, které graf může obsahovat.
      */
@@ -60,7 +64,7 @@ public:
      *
      * @details
      * Smaže každý objekt Vertex, pole ukazatelů na vrcholy,
-     * každý řádek matice sousednosti a pole ukazatelů na řádky.
+     * každý seznam sousedů, pole ukazatelů na seznamy a pole čítačů sousedů.
      */
     ~Graph();
 
@@ -116,11 +120,12 @@ public:
      * Nejrychlejší test – zahodí evidentně špatné grafy bez dalšího procházení.
      *
      * **Krok 2 – kontrola smyček:**
-     * Prochází diagonálu matice sousednosti (`edges[i][i]`).
-     * Pokud je hodnota 1, vrchol ukazuje sám na sebe – strom smyčku mít nesmí.
+     * Pro každý vrchol projde jeho seznam sousedů a hledá výskyt sebe sama.
+     * Pokud vrchol obsahuje sám sebe ve svém seznamu sousedů, jde o smyčku –
+     * strom smyčku mít nesmí.
      *
      * **Krok 3 – kontrola spojitosti (iterativní DFS):**
-     * Spustí prohledávání do hloubky od vrcholu 0 a ověří,
+     * Spustí prohledávání do hloubky od vrcholu 0 přes seznamy sousedů a ověří,
      * že každý vrchol byl navštíven.
      *
      * **Složitost:**
@@ -143,8 +148,9 @@ public:
      * @brief Vypíše strukturu grafu (vrcholy a hrany) do konzole.
      *
      * @details
-     * Při výpisu hran se prochází pouze horní trojúhelník matice sousednosti,
-     * aby se každá neorientovaná hrana vytiskla jen jednou.
+     * Při výpisu hran se pro každý vrchol projdou jeho sousedé a vypíše se hrana
+     * jen tehdy, pokud má soused vyšší index než aktuální vrchol – díky tomu se
+     * každá neorientovaná hrana vytiskne jen jednou.
      */
     void printGraph();
 };

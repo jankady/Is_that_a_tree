@@ -16,14 +16,14 @@
  *
  * Každý vrchol má:
  * - **id** – interní index přiřazený sekvenčně při vytvoření (používá se jako
- *   index do matice sousednosti).
+ *   index do seznamu sousednosti).
  * - **value** – uživatelský štítek, podle kterého se vrchol identifikuje
  *   zvenčí grafu.
  *
  */
 class Vertex {
 private:
-    int id;     ///< Interní nulový index používaný pro adresování matice sousednosti.
+    int id;     ///< Interní nulový index používaný pro adresování seznamu sousednosti.
     int value;  ///< Uživatelová celočíselná hodnota vrcholu.
 
 public:
@@ -42,7 +42,7 @@ public:
 
     /**
      * @brief Vrátí interní index vrcholu.
-     * @return Nulový index do matice sousednosti.
+     * @return Nulový index do seznamu sousednosti.
      */
     int getId();
 };

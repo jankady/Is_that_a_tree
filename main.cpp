@@ -34,7 +34,7 @@
  * Detekce stromu probíhá ve třech krocích:
  * -# **Kontrola počtu hran:** Graf musí mít přesně V-1 hran.
  *    Nejrychlejší test – zahodí evidentně špatné grafy bez dalšího procházení.
- * -# **Kontrola smyček:** Projde diagonálu matice sousednosti.
+ * -# **Kontrola smyček:** Pro každý vrchol projde jeho seznam sousedů a hledá výskyt sebe sama.
  *    Smyčka (hrana vrcholu na sebe sama) ihned diskvalifikuje strom.
  * -# **Kontrola spojitosti:** Iterativní DFS od vrcholu 0 ověří,
  *    že jsou všechny vrcholy dosažitelné.

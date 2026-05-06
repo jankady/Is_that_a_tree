@@ -20,10 +20,11 @@ Graph::Graph(int v) {
         this->vertexes[i] = nullptr;
     }
 
-    this->edges = new int*[v];
+    this->neighbors = new int*[v];
     for (int i = 0; i < v; i++) {
-        this->edges[i] = new int[v](); // () inicializuje hodnoty na 0
+        this->neighbors[i] = new int[v]; // kapacita = max V sousedů na vrchol
     }
+    this->neighborCount = new int[v](); // () inicializuje hodnoty na 0
     this->vertexCount = 0;
     this->edgeCount = 0;
     this->maxVertexCount = v;
@@ -36,9 +37,10 @@ Graph::~Graph() {
     delete[] this->vertexes;
 
     for (int i = 0; i < this->maxVertexCount; i++) {
-        delete[] this->edges[i];
+        delete[] this->neighbors[i];
     }
-    delete[] this->edges;
+    delete[] this->neighbors;
+    delete[] this->neighborCount;
 }
 
 int Graph::getVertexIndexFromValue(int vertexValue) {
@@ -86,11 +88,19 @@ void Graph::addEdge(int vertex1Value, int vertex2Value) {
         return;
     }
 
-    if (this->edges[vertex1][vertex2] == 0) {
-        this->edges[vertex1][vertex2] = 1;
-        this->edges[vertex2][vertex1] = 1; // neorientovaný graf – matice je symetrická
-        this->edgeCount++;
+    // Lineární kontrola, zda hrana již neexistuje (duplicita).
+    for (int i = 0; i < this->neighborCount[vertex1]; i++) {
+        if (this->neighbors[vertex1][i] == vertex2) {
+            return;
+        }
     }
+
+    // Vložení do seznamů obou koncových vrcholů.
+    this->neighbors[vertex1][this->neighborCount[vertex1]++] = vertex2;
+    if (vertex1 != vertex2) {
+        this->neighbors[vertex2][this->neighborCount[vertex2]++] = vertex1;
+    }
+    this->edgeCount++;
 }
 
 bool Graph::isTree() {
@@ -109,11 +119,13 @@ bool Graph::isTree() {
     }
 
     // Krok 2: Smyčka (hrana vrcholu na sebe sama) okamžitě diskvalifikuje strom.
-    // Prochází diagonálu matice – edges[i][i] == 1 znamená smyčku na vrcholu i.
+    // Pro každý vrchol projde jeho seznam sousedů a hledá výskyt sebe sama.
     for (int i = 0; i < this->vertexCount; i++) {
-        if (this->edges[i][i] == 1) {
-            std::cout << "Graph contains a self-loop on vertex " << this->vertexes[i]->getValue() << std::endl;
-            return false;
+        for (int j = 0; j < this->neighborCount[i]; j++) {
+            if (this->neighbors[i][j] == i) {
+                std::cout << "Graph contains a self-loop on vertex " << this->vertexes[i]->getValue() << std::endl;
+                return false;
+            }
         }
     }
 
@@ -134,9 +146,10 @@ bool Graph::isTree() {
             continue;
         }
         visited[currentIndex] = true;
-        for (int i = 0; i < this->vertexCount; i++) {
-            if (this->edges[currentIndex][i] == 1 && !visited[i]) {
-                stack.push(this->vertexes[i]);
+        for (int j = 0; j < this->neighborCount[currentIndex]; j++) {
+            int next = this->neighbors[currentIndex][j];
+            if (!visited[next]) {
+                stack.push(this->vertexes[next]);
             }
         }
     }
@@ -163,10 +176,11 @@ void Graph::printGraph() {
     }
     std::cout << "Edges:" << std::endl;
     for (int i = 0; i < this->vertexCount; i++) {
-        for (int j = i; j < this->vertexCount; j++) { // horní trojúhelník – každá hrana se tiskne jen jednou
-            if (this->edges[i][j] == 1) {
+        for (int j = 0; j < this->neighborCount[i]; j++) {
+            int neighbor = this->neighbors[i][j];
+            if (neighbor >= i) { // tiskneme jen jednou; >= zachová smyčku (i == i)
                 std::cout << "Edge between vertex " << this->vertexes[i]->getValue()
-                          << " and vertex " << this->vertexes[j]->getValue() << std::endl;
+                          << " and vertex " << this->vertexes[neighbor]->getValue() << std::endl;
             }
         }
     }
